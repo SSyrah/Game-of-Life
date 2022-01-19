@@ -6,7 +6,8 @@
 #include <ctype.h>
 #include <time.h>
 using namespace std;
-const int maxrow = 20, maxcol = 60;    //  grid dimensions
+
+
 
 enum Error_code {
 	success, fail, utility_range_error, underflow, overflow, fatal,
@@ -14,16 +15,22 @@ enum Error_code {
 	internal_error
 };
 
+
 void instructions();
 bool user_says_yes();
-
+int** allocate_grid(int&, int&);
+int askValue();
 
 class Life {
 public:
-   void initialize();
-   void print();
-   void update();
+
+   void initialize(int**, const int&, const int&);
+   void print(const int&, const int&); 
+   void update(const int&, const int&);
+    ~Life();
+   
+  
 private:
-   int grid[maxrow + 2][maxcol + 2];  //  allows for two extra rows and columns
-   int neighbor_count(int row, int col);
+	int** grid;
+    int neighbor_count(int row, int col);
 };

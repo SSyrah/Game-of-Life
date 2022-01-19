@@ -1,5 +1,15 @@
 #include "life.h"
 
+
+int** allocate_grid(int& maxrow, int& maxcol)
+{
+    int** arr = new int* [maxrow + 2];
+    for (int i = 0; i < maxrow+2; i++)
+        arr[i] = new int[maxcol + 2];
+    return arr;
+    
+}
+
 int Life::neighbor_count(int row, int col)
 /*
 Pre:  The Life object contains a configuration, and the coordinates
@@ -17,7 +27,7 @@ Post: The number of living neighbors of the specified cell is returned.
    return count;
 }
 
-void Life::update()
+void Life::update(const int& maxrow, const int& maxcol)
 /*
 Pre:  The Life object contains a configuration.
 Post: The Life object contains the next generation of configuration.
@@ -25,7 +35,8 @@ Post: The Life object contains the next generation of configuration.
 
 {
    int row, col;
-   int new_grid[maxrow + 2][maxcol + 2];
+   // int new_grid[maxrow + 2][maxcol + 2];
+   int** new_grid = grid;
 
    for (row = 1; row <= maxrow; row++)
       for (col = 1; col <= maxcol; col++)
@@ -43,7 +54,15 @@ Post: The Life object contains the next generation of configuration.
    for (row = 1; row <= maxrow; row++)
       for (col = 1; col <= maxcol; col++)
          grid[row][col] = new_grid[row][col];
+   
+  
 }
+
+Life::~Life()
+{
+    cout << endl << endl << "\t Thank you for using this program!" << endl;
+}
+
 
 void instructions()
 /*
@@ -53,8 +72,8 @@ Post: Instructions for using the Life program have been printed.
 
 {
    cout << "Welcome to Conway's game of Life." << endl;
-   cout << "This game uses a grid of size "
-        << maxrow << " by " << maxcol << " in which" << endl;
+   //cout << "This game uses a grid of size "
+   //     << maxrow << " by " << maxcol << " in which" << endl;
    cout << "each cell can either be occupied by an organism or not." << endl;
    cout << "The occupied cells change from generation to generation" << endl;
    cout << "according to the number of neighboring cells which are alive."
@@ -62,13 +81,14 @@ Post: Instructions for using the Life program have been printed.
 }
 
 
-void Life::initialize()
+void Life::initialize(int** aGrid, const int &maxrow, const int &maxcol)
 /*
 Pre:  None.
 Post: The Life object contains a configuration specified by the user.
 */
 
 {
+   grid = aGrid;
    int row, col;
    for (row = 0; row <= maxrow+1; row++)
       for (col = 0; col <= maxcol+1; col++)
@@ -90,14 +110,14 @@ Post: The Life object contains a configuration specified by the user.
 }
 
 
-void Life::print()
+void Life::print(const int& maxrow, const int& maxcol)
 /*
 Pre:  The Life object contains a configuration.
 Post: The configuration is written for the user.
 */
 
 {
-   int row, col;
+   int row = maxrow, col = maxcol;
    cout << "\nThe current Life configuration is:" <<endl;
    for (row = 1; row <= maxrow; row++) {
       for (col = 1; col <= maxcol; col++)
@@ -127,4 +147,20 @@ bool user_says_yes()
 		initial_response = false;
 	} while (c != 'y' && c != 'Y' && c != 'n' && c != 'N');
 	return (c == 'y' || c == 'Y');
+}
+
+int askValue() {
+    int temp;
+    bool operand = true;
+    do {
+        std::cout << "Give value (1-60):\n";
+        cin >> temp;
+        if (temp < 1 || temp > 60) {
+            std::cout << "False input or out of range.\n";
+            operand = false;
+           }
+        operand = true;
+    } while (!operand);
+    
+    return temp;
 }

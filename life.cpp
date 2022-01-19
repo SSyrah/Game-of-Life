@@ -3,14 +3,14 @@
 
 int** allocate_grid(int& maxrow, int& maxcol)
 {
-    int** arr = new int* [maxrow + 2];
-    for (int i = 0; i < maxrow+2; i++)
-        arr[i] = new int[maxcol + 2];
+    int** arr = new int* [maxrow];
+    for (int i = 0; i <=maxrow; i++)
+        arr[i] = new int[maxcol];
     return arr;
     
 }
 
-int Life::neighbor_count(int row, int col)
+int Life::neighbor_count(int row, int col, int rows, int cols)
 /*
 Pre:  The Life object contains a configuration, and the coordinates
       row and col define a cell inside its hedge.
@@ -20,9 +20,30 @@ Post: The number of living neighbors of the specified cell is returned.
 {
    int i, j;
    int count = 0;
-   for (i = row - 1; i <= row + 1; i++)
-      for (j = col - 1; j <= col + 1; j++)
-         count += grid[i][j];  //  Increase the count if neighbor is alive.
+
+   if (row == 1) {
+       for (i = row; i <= row + 1; i++) {
+           if (col == 1) {
+               for (j = col; j <= cols; j++) {
+                   count += grid[i][j];
+               }
+           }
+       }
+   }
+   else if (row == rows) {
+       for (i = row; i >= row - 1; i--) {
+           if (col == 1) {
+               for (j = col; j <= cols; j++) {
+                   count += grid[i][j];
+               }
+           }
+       }
+   }
+   else {
+       for (i = row - 1; i <= row + 1; i++)
+           for (j = col - 1; j <= col + 1; j++)
+               count += grid[i][j];  //  Increase the count if neighbor is alive.
+   }
    count -= grid[row][col]; //  Reduce count, since cell is not its own neighbor.
    return count;
 }
@@ -37,10 +58,12 @@ Post: The Life object contains the next generation of configuration.
    int row, col;
    // int new_grid[maxrow + 2][maxcol + 2];
    int** new_grid = grid;
-
+   int rows = maxrow;
+   int cols = maxcol;
+   // cout << rows << "\t" << cols;
    for (row = 1; row <= maxrow; row++)
       for (col = 1; col <= maxcol; col++)
-         switch (neighbor_count(row, col)) {
+         switch (neighbor_count(row, col, rows, cols)) {
          case 2:
             new_grid[row][col] = grid[row][col];  //  Status stays the same.
             break;
@@ -90,8 +113,8 @@ Post: The Life object contains a configuration specified by the user.
 {
    grid = aGrid;
    int row, col;
-   for (row = 0; row <= maxrow+1; row++)
-      for (col = 0; col <= maxcol+1; col++)
+   for (row = 0; row <= maxrow; row++)
+      for (col = 0; col <= maxcol; col++)
          grid[row][col] = 0;
    cout << "List the coordinates for living cells." << endl;
    cout << "Terminate the list with the special pair -1 -1" << endl;

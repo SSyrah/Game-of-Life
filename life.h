@@ -32,5 +32,5 @@ public:
   
 private:
 	int** grid;
-    int neighbor_count(int row, int col);
+    int neighbor_count(int row, int col, int rows, int cols);
 };

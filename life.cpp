@@ -6,8 +6,7 @@ int** allocate_grid(int& maxrow, int& maxcol)
     int** arr = new int* [maxrow];
     for (int i = 0; i <=maxrow; i++)
         arr[i] = new int[maxcol];
-    return arr;
-    
+    return arr;  
 }
 
 int Life::neighbor_count(int row, int col, int rows, int cols)
@@ -116,10 +115,11 @@ Post: The Life object contains a configuration specified by the user.
    for (row = 0; row <= maxrow; row++)
       for (col = 0; col <= maxcol; col++)
          grid[row][col] = 0;
+
    cout << "List the coordinates for living cells." << endl;
    cout << "Terminate the list with the special pair -1 -1" << endl;
    cin >> row >> col;
-
+   
    while (row != -1 || col != -1) {
       if (row >= 1 && row <= maxrow)
          if (col >= 1 && col <= maxcol)
@@ -172,18 +172,29 @@ bool user_says_yes()
 	return (c == 'y' || c == 'Y');
 }
 
-int askValue() {
+void askValue(int &row, int &col) {
     int temp;
     bool operand = true;
     do {
-        std::cout << "Give value (1-60):\n";
+        std::cout << "Give value of rows (1-60):\n";
         cin >> temp;
         if (temp < 1 || temp > 60) {
             std::cout << "False input or out of range.\n";
             operand = false;
-           }
+        }
         operand = true;
     } while (!operand);
+    row = temp;
+
+    do {
+        std::cout << "Give value of cols (1-60):\n";
+        cin >> temp;
+        if (temp < 1 || temp > 60) {
+            std::cout << "False input or out of range.\n";
+            operand = false;
+        }
+        operand = true;
+    } while (!operand);
+    col = temp;
     
-    return temp;
-}
+ }

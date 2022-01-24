@@ -14,8 +14,8 @@ Uses: The class Life and its methods initialize(), print(), and update().
    int rows = 0, cols = 0;
    Life configuration;
    instructions();
-   rows = askValue();
-   cols = askValue();
+   askValue(rows, cols);
+   // cols = askValue();
    int** arr = allocate_grid(rows, cols);
    configuration.initialize(arr, rows, cols);
    configuration.print(rows, cols);

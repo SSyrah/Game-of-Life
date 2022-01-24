@@ -19,7 +19,7 @@ enum Error_code {
 void instructions();
 bool user_says_yes();
 int** allocate_grid(int&, int&);
-int askValue();
+void askValue(int&, int&);
 
 class Life {
 public:

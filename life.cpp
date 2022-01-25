@@ -107,7 +107,7 @@ Post: The Life object contains a configuration specified by the user.
    std::fstream myfile;
    std::string line;
    size_t limit;
-   char array[60] = { '\0' };
+   char array[60] = {'\0'};
    bool operand = true;
    int option;
    grid = aGrid;
@@ -123,7 +123,7 @@ Post: The Life object contains a configuration specified by the user.
    std::cout << "Pressing just Enter starting from next row concludes the filling process.\n";
    std::cout << "Do you want to read from file or fill grid by yourself?" << std::endl;
    std::cout << "Option 1 = Fill by yourself, Option 2 = read from a file." << std::endl;
-   std::cout << "Choose option:";
+   std::cout << "Choose option: ";
    std::cin >> option;
    std::cin.ignore();
 
@@ -154,23 +154,26 @@ Post: The Life object contains a configuration specified by the user.
                std::cout << "File cannot be read" << std::endl;
            }
            else {
-               std::string lines("");
                std::cout << "File opened succesfully." << std::endl;
+               int count = 0, counter = 0;
+               std::string lim;
+               std::getline(myfile, lim);
+               int limits = lim.length();
+                                 
                while (!myfile.eof()) {
-                   
-                   if (std::getline(myfile, lines)) {}
+                   array[count] = myfile.get();
+                   std::cout << array[count];
+                   count++;
                }
-               std::strcpy(array, lines.c_str());
-
-               for (int i = 0; i < sizeof(array); i++)
-                   std::cout << array[i] << std::endl;
-               for (int i = 0; i < maxrow; i++) {
-                   for (int j = 0; j < maxcol; j++) {
-                       std::cout << "Array" << j << "is:" << array[j] << std::endl;
+               counter = (count / limits) + 1;
+               for (int i = 0; i < counter; i++) {
+                   for (int j = 0; j < limits; j++) {
                        if (array[j] == 'x')
                            grid[i][j] = 1;
+                       
                    }
                }
+               myfile.close();
            }
            operand = false;
            break;
@@ -269,3 +272,13 @@ void askValue(int &row, int &col) {
     std::cin.ignore();
       
  }
+
+void Life::result_to_file() {
+
+    std::cout << "Writing result to file." << std::endl;
+    std::ofstream result;
+    result.open("result.txt");
+    result << grid;
+    std::cout << grid;
+    result.close();
+}

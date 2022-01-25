@@ -25,5 +25,7 @@ Uses: The class Life and its methods initialize(), print(), and update().
       configuration.print(rows,cols);
       std::cout << "Continue viewing new generations? " << std::endl;
    }
+   configuration.result_to_file();
+
    return 0;
 }

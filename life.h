@@ -7,6 +7,7 @@
 #include <ctype.h>
 #include <time.h>
 #include <vector>
+#include <math.h>
 //using namespace std;
 
 
@@ -31,6 +32,8 @@ public:
    void print(const int&, const int&); 
    void update(const int&, const int&);
     ~Life();
+	void result_to_file();
+
    
   
 private:

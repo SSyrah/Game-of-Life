@@ -104,8 +104,16 @@ Post: The Life object contains a configuration specified by the user.
 */
 
 {
+   std::fstream myfile;
+   std::string line;
+   size_t limit;
+   char array[60] = { '\0' };
+   bool operand = true;
+   int option;
    grid = aGrid;
    int row, col;
+
+
    for (row = 0; row < maxrow; row++)
       for (col = 0; col < maxcol; col++)
          grid[row][col] = 0;
@@ -113,29 +121,66 @@ Post: The Life object contains a configuration specified by the user.
    //Start to fill grid row by row until user presses just Enter:
    std::cout << "Fill rows one by one (space = dead cell / x = alive cell.\n";
    std::cout << "Pressing just Enter starting from next row concludes the filling process.\n";
+   std::cout << "Do you want to read from file or fill grid by yourself?" << std::endl;
+   std::cout << "Option 1 = Fill by yourself, Option 2 = read from a file." << std::endl;
+   std::cout << "Choose option:";
+   std::cin >> option;
+   std::cin.ignore();
 
-   std::string line;
-   size_t limit;
-   char array[60] = { '\0' };
-   bool operand = true;
-   int n;
-
-   for (int i = 0; i < maxrow; i++) {
-       
-           std::cout << i + 1 << ":  ";
-           std::getline(std::cin, line, '\n');
-           limit = line.length();
-           std::strcpy(array, line.c_str());
-          
-           for (int j = 0; j < maxcol; j++) {
-               if (array[j] == 'x')
-                   grid[i][j] = 1;
+   while (operand) {
+       switch (option) {
+       case 1:
+           for (int i = 0; i < maxrow; i++) {
+               std::cout << i + 1 << ":  ";
+               std::getline(std::cin, line, '\n');
+               limit = line.length();
+               std::strcpy(array, line.c_str());
+               for (int j = 0; j < maxcol; j++) {
+                   if (array[j] == 'x')
+                       grid[i][j] = 1;
+               }
+               if (line.length() == 0)
+                   break;
+               line = "";
+               std::memset(array, 0, sizeof(array));
+               
            }
-           if (line.length() == 0)
-               break;
-           line = "";
-           std::memset(array, 0, sizeof(array));
-    }
+           operand = false;
+           break;
+
+       case 2:
+           myfile.open("grid.txt", std::ios::in);
+           if (!myfile) {
+               std::cout << "File cannot be read" << std::endl;
+           }
+           else {
+               std::string lines("");
+               std::cout << "File opened succesfully." << std::endl;
+               while (!myfile.eof()) {
+                   
+                   if (std::getline(myfile, lines)) {}
+               }
+               std::strcpy(array, lines.c_str());
+
+               for (int i = 0; i < sizeof(array); i++)
+                   std::cout << array[i] << std::endl;
+               for (int i = 0; i < maxrow; i++) {
+                   for (int j = 0; j < maxcol; j++) {
+                       std::cout << "Array" << j << "is:" << array[j] << std::endl;
+                       if (array[j] == 'x')
+                           grid[i][j] = 1;
+                   }
+               }
+           }
+           operand = false;
+           break;
+       default:
+           std::cout << "Input out of range, enter input again:" << std::endl;
+           std::cin >> option;
+           std::cin.ignore();
+
+       }
+   }  
    
 }
        /*

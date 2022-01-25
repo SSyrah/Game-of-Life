@@ -116,44 +116,45 @@ Post: The Life object contains a configuration specified by the user.
 
    std::string line;
    size_t limit;
-   char array[60];
+   char array[60] = { '\0' };
+   bool operand = true;
+   int n;
 
    for (int i = 0; i < maxrow; i++) {
-       std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-       std::cout << i + 1 << ":  ";
-       std::getline(std::cin, line);
-
-       limit = line.length();
-       //std::cout << line << std::endl;
-       //std::cout << line.length() << std::endl;
-       std::strcpy(array, line.c_str());
-     
-       for (int j = 0; j < maxcol; j++) {
-            if (array[j] == 'x')
-                grid[i][j] = 1;             
+       
+           std::cout << i + 1 << ":  ";
+           std::getline(std::cin, line, '\n');
+           limit = line.length();
+           std::strcpy(array, line.c_str());
+          
+           for (int j = 0; j < maxcol; j++) {
+               if (array[j] == 'x')
+                   grid[i][j] = 1;
            }
-       if (line.length() == 0)
-           break;
-       line = "";
-           
-       }
-    /*
-   std::cout << "List the coordinates for living cells." << std::endl;
-   std::cout << "Terminate the list with the special pair -1 -1" << std::endl;
-   std::cin >> row >> col;
+           if (line.length() == 0)
+               break;
+           line = "";
+           std::memset(array, 0, sizeof(array));
+    }
    
-      
-   while (row != -1 || col != -1) {
-      if (row >= 1 && row <= maxrow)
-         if (col >= 1 && col <= maxcol)
-            grid[row][col] = 1;
-         else
-             std::cout << "Column " << col << " is out of range." << std::endl;
-      else
-          std::cout << "Row " << row << " is out of range." << std::endl;
-      std::cin >> row >> col;
-   }*/
 }
+       /*
+      std::cout << "List the coordinates for living cells." << std::endl;
+      std::cout << "Terminate the list with the special pair -1 -1" << std::endl;
+      std::cin >> row >> col;
+
+
+      while (row != -1 || col != -1) {
+         if (row >= 1 && row <= maxrow)
+            if (col >= 1 && col <= maxcol)
+               grid[row][col] = 1;
+            else
+                std::cout << "Column " << col << " is out of range." << std::endl;
+         else
+             std::cout << "Row " << row << " is out of range." << std::endl;
+         std::cin >> row >> col;
+      }*/
+ 
 
 
 void Life::print(const int& maxrow, const int& maxcol)
@@ -220,5 +221,6 @@ void askValue(int &row, int &col) {
         operand = true;
     } while (!operand);
     col = temp;
+    std::cin.ignore();
       
  }

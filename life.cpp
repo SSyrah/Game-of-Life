@@ -4,7 +4,7 @@
 int** allocate_grid(int& maxrow, int& maxcol)
 {
     int** arr = new int* [maxrow];
-    for (int i = 0; i <=maxrow; i++)
+    for (int i = 0; i < maxrow; i++)
         arr[i] = new int[maxcol];
     return arr;  
 }
@@ -20,32 +20,26 @@ Post: The number of living neighbors of the specified cell is returned.
    int i, j;
    int count = 0;
 
-   if (row == 1) {
-       for (i = row; i <= row + 1; i++) {
-           if (col == 1) {
-               for (j = col; j <= cols; j++) {
-                   count += grid[i][j];
-               }
-           }
-       }
-   }
-   else if (row == rows) {
-       for (i = row; i >= row - 1; i--) {
-           if (col == 1) {
-               for (j = col; j <= cols; j++) {
-                   count += grid[i][j];
-               }
-           }
-       }
-   }
-   else {
-       for (i = row - 1; i <= row + 1; i++)
-           for (j = col - 1; j <= col + 1; j++)
+   int i_beg = row - 1 >= 0 ? row - 1 : 0;
+   int i_end = row + 1 < rows ? row + 1 : rows - 1;
+   int j_beg = col - 1 >= 0 ? col - 1 : 0;
+   int j_end = col + 1 < cols ? col + 1 : cols - 1;
+   
+   
+   for (i = i_beg; i <= i_end; i++)
+       for (j = j_beg; j <= j_end; j++)
+           if (true == legal_position(i, j, rows, cols))
                count += grid[i][j];  //  Increase the count if neighbor is alive.
-   }
+   
    count -= grid[row][col]; //  Reduce count, since cell is not its own neighbor.
    return count;
 }
+
+bool Life::legal_position(int row, int col, int maxr, int maxc)
+{
+    return (0 <= row && row < maxr && 0 <= col && col < maxc);
+}
+
 
 void Life::update(const int& maxrow, const int& maxcol)
 /*
@@ -60,8 +54,8 @@ Post: The Life object contains the next generation of configuration.
    int rows = maxrow;
    int cols = maxcol;
    // cout << rows << "\t" << cols;
-   for (row = 1; row <= maxrow; row++)
-      for (col = 1; col <= maxcol; col++)
+   for (row = 0; row < maxrow; row++)
+      for (col = 0; col < maxcol; col++)
          switch (neighbor_count(row, col, rows, cols)) {
          case 2:
             new_grid[row][col] = grid[row][col];  //  Status stays the same.
@@ -73,8 +67,8 @@ Post: The Life object contains the next generation of configuration.
             new_grid[row][col] = 0;                //  Cell is now dead.
          }
 
-   for (row = 1; row <= maxrow; row++)
-      for (col = 1; col <= maxcol; col++)
+   for (row = 0; row < maxrow; row++)
+      for (col = 0; col < maxcol; col++)
          grid[row][col] = new_grid[row][col];
    
   
@@ -82,7 +76,7 @@ Post: The Life object contains the next generation of configuration.
 
 Life::~Life()
 {
-    cout << endl << endl << "\t Thank you for using this program!" << endl;
+    std::cout << std::endl << std::endl << "\t Thank you for using this program!" << std::endl;
 }
 
 
@@ -93,13 +87,13 @@ Post: Instructions for using the Life program have been printed.
 */
 
 {
-   cout << "Welcome to Conway's game of Life." << endl;
+    std::cout << "Welcome to Conway's game of Life." << std::endl;
    //cout << "This game uses a grid of size "
    //     << maxrow << " by " << maxcol << " in which" << endl;
-   cout << "each cell can either be occupied by an organism or not." << endl;
-   cout << "The occupied cells change from generation to generation" << endl;
-   cout << "according to the number of neighboring cells which are alive."
-        << endl;
+    std::cout << "each cell can either be occupied by an organism or not." << std::endl;
+    std::cout << "The occupied cells change from generation to generation" << std::endl;
+    std::cout << "according to the number of neighboring cells which are alive."
+        << std::endl;
 }
 
 
@@ -112,24 +106,53 @@ Post: The Life object contains a configuration specified by the user.
 {
    grid = aGrid;
    int row, col;
-   for (row = 0; row <= maxrow; row++)
-      for (col = 0; col <= maxcol; col++)
+   for (row = 0; row < maxrow; row++)
+      for (col = 0; col < maxcol; col++)
          grid[row][col] = 0;
-
-   cout << "List the coordinates for living cells." << endl;
-   cout << "Terminate the list with the special pair -1 -1" << endl;
-   cin >> row >> col;
    
+   //Start to fill grid row by row until user presses just Enter:
+   std::cout << "Fill rows one by one (space = dead cell / x = alive cell.\n";
+   std::cout << "Pressing just Enter starting from next row concludes the filling process.\n";
+
+   std::string line;
+   size_t limit;
+   char array[60];
+
+   for (int i = 0; i < maxrow; i++) {
+       std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+       std::cout << i + 1 << ":  ";
+       std::getline(std::cin, line);
+
+       limit = line.length();
+       //std::cout << line << std::endl;
+       //std::cout << line.length() << std::endl;
+       std::strcpy(array, line.c_str());
+     
+       for (int j = 0; j < maxcol; j++) {
+            if (array[j] == 'x')
+                grid[i][j] = 1;             
+           }
+       if (line.length() == 0)
+           break;
+       line = "";
+           
+       }
+    /*
+   std::cout << "List the coordinates for living cells." << std::endl;
+   std::cout << "Terminate the list with the special pair -1 -1" << std::endl;
+   std::cin >> row >> col;
+   
+      
    while (row != -1 || col != -1) {
       if (row >= 1 && row <= maxrow)
          if (col >= 1 && col <= maxcol)
             grid[row][col] = 1;
          else
-            cout << "Column " << col << " is out of range." << endl;
+             std::cout << "Column " << col << " is out of range." << std::endl;
       else
-         cout << "Row " << row << " is out of range." << endl;
-      cin >> row >> col;
-   }
+          std::cout << "Row " << row << " is out of range." << std::endl;
+      std::cin >> row >> col;
+   }*/
 }
 
 
@@ -140,15 +163,16 @@ Post: The configuration is written for the user.
 */
 
 {
-   int row = maxrow, col = maxcol;
-   cout << "\nThe current Life configuration is:" <<endl;
-   for (row = 1; row <= maxrow; row++) {
-      for (col = 1; col <= maxcol; col++)
-         if (grid[row][col] == 1) cout << '*';
-         else cout << ' ';
-      cout << endl;
+   int row, col;
+   std::cout << "\nThe current Life configuration is:" << std::endl;
+   for (row = 0; row < maxrow; row++) {
+      for (col = 0; col < maxcol; col++)
+
+          if (grid[row][col] == 1) std::cout << '*';
+         else std::cout << ' ';
+      std::cout << std::endl;
    }
-   cout << endl;
+   std::cout << std::endl;
 }
 
 
@@ -159,13 +183,13 @@ bool user_says_yes()
 
 	do {  //  Loop until an appropriate input is received.
 		if (initial_response)
-			cout << " (y,n)? " << flush;
+            std::cout << " (y,n)? " << std::flush;
 
 		else
-			cout << "Respond with either y or n: " << flush;
+            std::cout << "Respond with either y or n: " << std::flush;
 
 		do { //  Ignore white space.
-			c = cin.get();
+			c = std::cin.get();
 		} while (c == '\n' || c == ' ' || c == '\t');
 		initial_response = false;
 	} while (c != 'y' && c != 'Y' && c != 'n' && c != 'N');
@@ -176,8 +200,8 @@ void askValue(int &row, int &col) {
     int temp;
     bool operand = true;
     do {
-        std::cout << "Give value of rows (1-60):\n";
-        cin >> temp;
+        std::cout << "Give value of rows (1-60): ";
+        std::cin >> temp;
         if (temp < 1 || temp > 60) {
             std::cout << "False input or out of range.\n";
             operand = false;
@@ -187,8 +211,8 @@ void askValue(int &row, int &col) {
     row = temp;
 
     do {
-        std::cout << "Give value of cols (1-60):\n";
-        cin >> temp;
+        std::cout << "Give value of cols (1-60): ";
+        std::cin >> temp;
         if (temp < 1 || temp > 60) {
             std::cout << "False input or out of range.\n";
             operand = false;
@@ -196,5 +220,5 @@ void askValue(int &row, int &col) {
         operand = true;
     } while (!operand);
     col = temp;
-    
+      
  }

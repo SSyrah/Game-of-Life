@@ -1,11 +1,13 @@
 #pragma once
 
+#define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <ctype.h>
 #include <time.h>
-using namespace std;
+#include <limits>
+//using namespace std;
 
 
 
@@ -21,6 +23,7 @@ bool user_says_yes();
 int** allocate_grid(int&, int&);
 void askValue(int&, int&);
 
+
 class Life {
 public:
 
@@ -31,6 +34,7 @@ public:
    
   
 private:
+	bool legal_position(int, int, int, int);
 	int** grid;
     int neighbor_count(int row, int col, int rows, int cols);
 };

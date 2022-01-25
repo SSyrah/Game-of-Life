@@ -19,11 +19,11 @@ Uses: The class Life and its methods initialize(), print(), and update().
    int** arr = allocate_grid(rows, cols);
    configuration.initialize(arr, rows, cols);
    configuration.print(rows, cols);
-   cout << "Continue viewing new generations? " << endl;
+   std::cout << "Continue viewing new generations? " <<std::endl;
    while (user_says_yes()) {
       configuration.update(rows,cols);
       configuration.print(rows,cols);
-      cout << "Continue viewing new generations? " << endl;
+      std::cout << "Continue viewing new generations? " << std::endl;
    }
    return 0;
 }

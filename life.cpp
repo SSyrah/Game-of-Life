@@ -108,6 +108,7 @@ Post: The Life object contains a configuration specified by the user.
    std::string line;
    size_t limit;
    char array[60] = {'\0'};
+   char arr[60][60] = {'\0'};
    bool operand = true;
    int option;
    grid = aGrid;
@@ -150,27 +151,31 @@ Post: The Life object contains a configuration specified by the user.
 
        case 2:
            myfile.open("grid.txt", std::ios::in);
+           
            if (!myfile) {
                std::cout << "File cannot be read" << std::endl;
            }
            else {
                std::cout << "File opened succesfully." << std::endl;
-               int count = 0, counter = 0;
+               int rows = 0, cols = 0;
                std::string lim;
                std::getline(myfile, lim);
                int limits = lim.length();
                                  
                while (!myfile.eof()) {
-                   array[count] = myfile.get();
-                   std::cout << array[count];
-                   count++;
+                   for (cols; cols < limits; cols++) {
+                       arr[rows][cols] = myfile.get();
+                       // std::cout << arr[rows][cols];
+                   }
+                   cols = 0;
+                   rows++;
                }
-               counter = (count / limits) + 1;
-               for (int i = 0; i < counter; i++) {
+               
+               for (int i = 0; i < rows; i++) {
                    for (int j = 0; j < limits; j++) {
-                       if (array[j] == 'x')
+                       if (arr[i][j] == 'x')
                            grid[i][j] = 1;
-                       
+                       // std::cout << grid[i][j];
                    }
                }
                myfile.close();
@@ -222,6 +227,7 @@ Post: The configuration is written for the user.
       std::cout << std::endl;
    }
    std::cout << std::endl;
+   
 }
 
 
@@ -275,16 +281,29 @@ void askValue(int &row, int &col) {
 
 void Life::result_to_file(int& maxrow, int& maxcol) {
 
-    std::cout << "Writing result to file." << std::endl;
+    std::cout << std::endl << std::endl;
+    std::cout << "Writing this result of the game to file." << std::endl;
+    for (int row = 0; row < maxrow; row++) {
+        for ( int col = 0; col < maxcol; col++)
+
+            if (grid[row][col] == 1) std::cout << '*';
+            else std::cout << '-';
+        std::cout << std::endl;
+    }
+    std::cout << std::endl;
+
+    
     std::ofstream result;
-    result.open("result.txt");
+    result.open("grid.txt");
     for (int i = 0; i < maxrow; i++) {
-        for (int j = 0; i < maxcol; i++) {
-            if (grid[i][j] == 1)
-                result << '*';
-            else
-                result << '-';
+        for (int j = 0; j < maxcol; j++) {
+            if (grid[i][j] == 1) {
+                result << "x";}
+            else {
+                result << "-";
+            }
         }
+        result << "\n";
     }
     result.close();
 }

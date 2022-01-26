@@ -11,7 +11,7 @@ Uses: The class Life and its methods initialize(), print(), and update().
 */
 
 {
-   int rows = 0, cols = 0;
+   int rows = 0, cols = 0,count=0,sec=2, round=0;
    Life configuration;
    instructions();
    askValue(rows, cols);
@@ -21,11 +21,24 @@ Uses: The class Life and its methods initialize(), print(), and update().
    configuration.print(rows, cols);
    std::cout << "Continue viewing new generations? " <<std::endl;
    while (user_says_yes()) {
-      configuration.update(rows,cols);
-      configuration.print(rows,cols);
+       std::cout << "How many rounds you want to be shown automaticly and" << std::endl;
+       std::cout << "How many seconds you want to show one round" << std::endl;
+       std::cout << "Input round and secs:" << std::endl;
+       std::cin >> round >> sec;
+       std::cin.ignore();
+
+       while (count <= round) {
+           configuration.update(rows, cols);
+           configuration.print(rows, cols);
+           std::this_thread::sleep_for(std::chrono::seconds(sec));
+           count++;
+       }
+      count = 0;
       std::cout << "Continue viewing new generations? " << std::endl;
+      
    }
    configuration.result_to_file(rows,cols);
+   
 
    return 0;
 }

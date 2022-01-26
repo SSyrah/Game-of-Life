@@ -218,7 +218,7 @@ Post: The configuration is written for the user.
       for (col = 0; col < maxcol; col++)
 
           if (grid[row][col] == 1) std::cout << '*';
-         else std::cout << ' ';
+         else std::cout << '-';
       std::cout << std::endl;
    }
    std::cout << std::endl;
@@ -273,12 +273,18 @@ void askValue(int &row, int &col) {
       
  }
 
-void Life::result_to_file() {
+void Life::result_to_file(int& maxrow, int& maxcol) {
 
     std::cout << "Writing result to file." << std::endl;
     std::ofstream result;
     result.open("result.txt");
-    result << grid;
-    std::cout << grid;
+    for (int i = 0; i < maxrow; i++) {
+        for (int j = 0; i < maxcol; i++) {
+            if (grid[i][j] == 1)
+                result << '*';
+            else
+                result << '-';
+        }
+    }
     result.close();
 }

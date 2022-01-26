@@ -32,7 +32,7 @@ public:
    void print(const int&, const int&); 
    void update(const int&, const int&);
     ~Life();
-	void result_to_file();
+	void result_to_file(int&, int&);
 
    
   
